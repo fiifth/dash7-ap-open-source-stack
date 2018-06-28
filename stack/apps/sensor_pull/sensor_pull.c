@@ -46,7 +46,7 @@
   #include "hwi2c.h"
 #endif
 
-#ifndef USE_SX127X
+#if !defined(USE_SX127X) && !defined(USE_NETDEV_SX127X)
   #error "background frames are only supported by the sx127x driver for now"
 #endif
 
