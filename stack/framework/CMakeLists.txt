@@ -60,14 +60,8 @@ FRAMEWORK_HEADER_DEFINE(BOOL FRAMEWORK_LOG_OUTPUT_ON_RTT)
 SET(FRAMEWORK_TIMER_LOG_ENABLED "FALSE" CACHE BOOL "Select whether to enable or disable the generation of logs from the timer")
 FRAMEWORK_HEADER_DEFINE(BOOL FRAMEWORK_TIMER_LOG_ENABLED)
 
-SET(FRAMEWORK_PHY_LOG_ENABLED "FALSE" CACHE BOOL "Select whether to enable or disable the generation of logs from the PHY layer")
-FRAMEWORK_HEADER_DEFINE(BOOL FRAMEWORK_PHY_LOG_ENABLED)
-
-SET(FRAMEWORK_ALP_LOG_ENABLED "FALSE" CACHE BOOL "Select whether to enable or disable the generation of logs from the ALP comonent")
+SET(FRAMEWORK_ALP_LOG_ENABLED "FALSE" CACHE BOOL "Select whether to enable or disable the generation of logs from the ALP component")
 FRAMEWORK_HEADER_DEFINE(BOOL FRAMEWORK_ALP_LOG_ENABLED)
-
-SET(FRAMEWORK_MODEM_LOG_ENABLED "FALSE" CACHE BOOL "Select whether to enable or disable the generation of logs from the modem component")
-FRAMEWORK_HEADER_DEFINE(BOOL FRAMEWORK_MODEM_LOG_ENABLED)
 
 SET(FRAMEWORK_SCHED_LOG_ENABLED "FALSE" CACHE BOOL "Select whether to enable or disable the generation of logs from the scheduler component")
 FRAMEWORK_HEADER_DEFINE(BOOL FRAMEWORK_SCHED_LOG_ENABLED)

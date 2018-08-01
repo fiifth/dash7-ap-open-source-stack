@@ -35,7 +35,7 @@
 #include "log.h"
 #include "MODULE_ALP_defs.h"
 
-#if defined(MODULE_ALP_LOG_ENABLED)
+#if defined(FRAMEWORK_LOG_ENABLED) && defined(MODULE_ALP_LOG_ENABLED)
 #define DPRINT(...) log_print_stack_string(LOG_STACK_ALP, __VA_ARGS__)
 #else
 #define DPRINT(...)
