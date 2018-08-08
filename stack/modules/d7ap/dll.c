@@ -279,7 +279,6 @@ void start_guard_period(timer_tick_t period)
     DPRINT("guard channel");
     guarded_channel = true;
     dll_guard_period_expiration_timer.next_event = period;
-    dll_guard_period_expiration_timer.priority = MAX_PRIORITY;
     timer_add_event(&dll_guard_period_expiration_timer);
 }
 
@@ -289,7 +288,6 @@ void start_background_scan()
 
     // Start a new tsched timer
     dll_background_scan_timer.next_event = tsched;
-    dll_background_scan_timer.priority = MAX_PRIORITY;
     timer_add_event(&dll_background_scan_timer);
 
     phy_rx_config_t config = {
@@ -364,7 +362,6 @@ void dll_signal_packet_transmitted(packet_t* packet)
     if (process_received_packets_after_tx)
     {
         dll_process_received_packet_timer.next_event = 0;
-        dll_process_received_packet_timer.priority = MAX_PRIORITY;
         assert(timer_add_event(&dll_process_received_packet_timer) == SUCCESS);
         process_received_packets_after_tx = false;
     }
@@ -575,14 +572,12 @@ static void execute_csma_ca(void *arg)
             {
                 switch_state(DLL_STATE_CCA1);
                 dll_cca_timer.next_event = t_offset;
-                dll_cca_timer.priority = MAX_PRIORITY;
                 assert(timer_add_event(&dll_cca_timer) == SUCCESS);
             }
             else
             {
                 switch_state(DLL_STATE_CCA1);
                 dll_cca_timer.next_event = 0;
-                dll_cca_timer.priority = MAX_PRIORITY;
                 assert(timer_add_event(&dll_cca_timer) == SUCCESS);
             }
 
@@ -598,7 +593,6 @@ static void execute_csma_ca(void *arg)
                 DPRINT("CCA fail because dll_to = %i", dll_to);
                 switch_state(DLL_STATE_CCA_FAIL);
                 dll_csma_timer.next_event = 0;
-                dll_csma_timer.priority = MAX_PRIORITY;
                 assert(timer_add_event(&dll_csma_timer) == SUCCESS);
                 break;
             }
@@ -649,7 +643,6 @@ static void execute_csma_ca(void *arg)
             }
 
             switch_state(DLL_STATE_CCA1);
-            dll_cca_timer.priority = MAX_PRIORITY;
             assert(timer_add_event(&dll_cca_timer) == SUCCESS);
             break;
         }
@@ -661,7 +654,6 @@ static void execute_csma_ca(void *arg)
             if (process_received_packets_after_tx)
             {
                 dll_process_received_packet_timer.next_event = 0;
-                dll_process_received_packet_timer.priority = MAX_PRIORITY;
                 assert(timer_add_event(&dll_process_received_packet_timer) == SUCCESS);
                 process_received_packets_after_tx = false;
             }
@@ -982,7 +974,6 @@ void dll_tx_frame(packet_t* packet)
             {
                 Te -= Trpd;
                 dll_csma_timer.next_event = Te;
-                dll_csma_timer.priority = MAX_PRIORITY;
                 timer_add_event(&dll_csma_timer);
                 return;
             }
