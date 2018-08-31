@@ -362,7 +362,8 @@ void dll_signal_packet_transmitted(packet_t* packet)
     if (process_received_packets_after_tx)
     {
         dll_process_received_packet_timer.next_event = 0;
-        assert(timer_add_event(&dll_process_received_packet_timer) == SUCCESS);
+        error_t rtc = timer_add_event(&dll_process_received_packet_timer);
+        assert(rtc == SUCCESS);
         process_received_packets_after_tx = false;
     }
 
@@ -437,7 +438,9 @@ static void cca_rssi_valid(int16_t cur_rssi)
             {
                 DPRINT("Start background advertising @ %i", timer_get_counter_value());
                 uint8_t dll_header_bg_frame[2];
-                assert(dll_assemble_packet_header(current_packet, dll_header_bg_frame) == 2);
+
+                uint8_t len = dll_assemble_packet_header(current_packet, dll_header_bg_frame);
+                assert(len == 2);
 
                 err = phy_send_packet_with_advertising(&current_packet->hw_radio_packet,
                                                        &current_packet->phy_config.tx,
@@ -484,7 +487,8 @@ static void execute_csma_ca(void *arg)
     {
         DPRINT("Guarded channel, UNC CSMA-CA");
         switch_state(DLL_STATE_TX_FOREGROUND);
-        assert(phy_send_packet(&current_packet->hw_radio_packet, &current_packet->phy_config.tx) == SUCCESS);
+        error_t rtc = phy_send_packet(&current_packet->hw_radio_packet, &current_packet->phy_config.tx);
+        assert(rtc == SUCCESS);
         return;
     }
 
@@ -572,13 +576,15 @@ static void execute_csma_ca(void *arg)
             {
                 switch_state(DLL_STATE_CCA1);
                 dll_cca_timer.next_event = t_offset;
-                assert(timer_add_event(&dll_cca_timer) == SUCCESS);
+                error_t rtc = timer_add_event(&dll_cca_timer);
+                assert(rtc == SUCCESS);
             }
             else
             {
                 switch_state(DLL_STATE_CCA1);
                 dll_cca_timer.next_event = 0;
-                assert(timer_add_event(&dll_cca_timer) == SUCCESS);
+                error_t rtc = timer_add_event(&dll_cca_timer);
+                assert(rtc == SUCCESS);
             }
 
             break;
@@ -593,7 +599,8 @@ static void execute_csma_ca(void *arg)
                 DPRINT("CCA fail because dll_to = %i", dll_to);
                 switch_state(DLL_STATE_CCA_FAIL);
                 dll_csma_timer.next_event = 0;
-                assert(timer_add_event(&dll_csma_timer) == SUCCESS);
+                error_t rtc = timer_add_event(&dll_csma_timer);
+                assert(rtc == SUCCESS);
                 break;
             }
 
@@ -643,7 +650,8 @@ static void execute_csma_ca(void *arg)
             }
 
             switch_state(DLL_STATE_CCA1);
-            assert(timer_add_event(&dll_cca_timer) == SUCCESS);
+            error_t rtc = timer_add_event(&dll_cca_timer);
+            assert(rtc == SUCCESS);
             break;
         }
         case DLL_STATE_CCA_FAIL:
@@ -654,7 +662,8 @@ static void execute_csma_ca(void *arg)
             if (process_received_packets_after_tx)
             {
                 dll_process_received_packet_timer.next_event = 0;
-                assert(timer_add_event(&dll_process_received_packet_timer) == SUCCESS);
+                error_t rtc = timer_add_event(&dll_process_received_packet_timer);
+                assert(rtc == SUCCESS);
                 process_received_packets_after_tx = false;
             }
 
@@ -742,7 +751,8 @@ void dll_execute_scan_automation(void *arg)
         // If TSCHED > 0, an independent scheduler is set to generate regular scan start events at TSCHED rate.
         DPRINT("Perform a dll background scan at the end of TSCHED (%d ticks)", tsched);
         dll_background_scan_timer.next_event = tsched;
-        assert(timer_add_event(&dll_background_scan_timer) == SUCCESS);
+        error_t rtc = timer_add_event(&dll_background_scan_timer);
+        assert(rtc == SUCCESS);
     }
 
     // Set by default the eirp in case we need to respond to an incoming request
@@ -952,8 +962,8 @@ void dll_tx_frame(packet_t* packet)
         }
         else
         {
-            //TODO support the Slow RSSI Variation computation method
-            assert(false);
+#warning "TODO support the Slow RSSI Variation computation method"
+            //assert(false);
         }
     }
 

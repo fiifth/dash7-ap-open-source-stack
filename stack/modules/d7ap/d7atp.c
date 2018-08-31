@@ -173,9 +173,9 @@ static void schedule_response_period_timeout_handler(timer_tick_t timeout_ticks)
     DPRINT("Starting response_period timer (%i ticks)", timeout_ticks);
 
     d7atp_response_period_expired_timer.next_event = timeout_ticks;
-    assert(timer_add_event(&d7atp_response_period_expired_timer) == SUCCESS);
+    error_t rtc = timer_add_event(&d7atp_response_period_expired_timer);
+    assert(rtc == SUCCESS);
 }
-
 
 static void terminate_dialog()
 {
